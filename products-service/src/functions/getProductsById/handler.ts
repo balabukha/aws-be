@@ -5,7 +5,6 @@ import productsJSON from '../stubs/productList.json'
 import schema from './schema';
 
 const getProductsById: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) => {
-  console.log('===> ', event);
   try {
     const {id} = event.pathParameters
     return formatJSONResponse({

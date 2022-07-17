@@ -12,6 +12,9 @@ const serverlessConfiguration: AWS = {
     runtime: 'nodejs14.x',
     stage: 'dev',
     region: 'eu-west-1',
+    httpApi: {
+      cors: true
+    },
     apiGateway: {
       minimumCompressionSize: 1024,
       shouldStartNameWithService: true,
@@ -21,7 +24,6 @@ const serverlessConfiguration: AWS = {
       NODE_OPTIONS: '--enable-source-maps --stack-trace-limit=1000',
     },
   },
-  // import the function via paths
   functions: { getProductsList, getProductsById },
   package: { individually: true },
   custom: {
