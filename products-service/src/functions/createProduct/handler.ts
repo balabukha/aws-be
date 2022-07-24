@@ -4,17 +4,19 @@ import {middyfy} from '@libs/lambda';
 import schema from './schema';
 import {ProductService} from "../../services/product.service";
 
-const getProductsById: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) => {
+const createProduct: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) => {
+  console.log(event.body);
+  // @ts-ignore
+  const {title, description, price, count} = event.body;
+  console.log(title, description, price, count)
   try {
-    const {id} = event.pathParameters
-
-    const rows = await ProductService.getProductById(id)
+    await ProductService.createProduct({title, description, price, count})
     return formatJSONResponse({
-      products: rows
+      products: []
     });
   } catch (e) {
     formatJSONResponseSpecificCode(404, {products: []})
   }
 };
 
-export const main = middyfy(getProductsById);
+export const main = middyfy(createProduct);
