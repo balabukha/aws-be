@@ -40,21 +40,27 @@ export class ProductService {
     return rows;
   }
 
-  static async createProduct({title, description, price, count}): Promise<(IProduct & ICount)[]> {
+  static async createProduct({title, description, price, count}): Promise<void> {
     await this.connectToToDb();
-    return this.connection.query(
-      `DO
+    try {
+      await this.connection.query(
+        `DO
 $$
     DECLARE
         my_uuid uuid = uuid_generate_v4();
     BEGIN
         INSERT INTO products (id, title, description, price)
         VALUES (my_uuid, '${title}', '${description}', ${price});
-        INSERT INTO stocks ("product_id", ${count})
-        VALUES (my_uuid, 22);
-    END
-$$`
-    );
+        INSERT INTO stocks ("product_id", count)
+        VALUES (my_uuid, ${count});
+    END;
+$$
+language plpgsql;`
+      );
+    } catch (e) {
+      console.log('error ', e)
+    }
+
     await this.closeDbConnection();
   }
 }

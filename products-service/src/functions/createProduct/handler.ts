@@ -8,14 +8,15 @@ const createProduct: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
   console.log(event.body);
   // @ts-ignore
   const {title, description, price, count} = event.body;
-  console.log(title, description, price, count)
-  try {
-    await ProductService.createProduct({title, description, price, count})
-    return formatJSONResponse({
-      products: []
-    });
-  } catch (e) {
-    formatJSONResponseSpecificCode(404, {products: []})
+  if (!Boolean(title) || !Boolean(description) || !Boolean(price) || !Boolean(count)) {
+    formatJSONResponseSpecificCode(400, {})
+  } else {
+    try {
+      await ProductService.createProduct({title, description, price, count})
+      return formatJSONResponse({});
+    } catch (e) {
+      formatJSONResponseSpecificCode(500, {})
+    }
   }
 };
 

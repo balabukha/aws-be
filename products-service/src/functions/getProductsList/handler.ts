@@ -11,7 +11,7 @@ const getProductsList: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async
       products: rows
     });
   } catch (e) {
-    formatJSONResponseSpecificCode(404, {products: []})
+    formatJSONResponseSpecificCode(500, {})
   }
 };
 
