@@ -1,17 +1,19 @@
 import type {ValidatedEventAPIGatewayProxyEvent} from '@libs/api-gateway';
 import {formatJSONResponse, formatJSONResponseSpecificCode} from '@libs/api-gateway';
 import {middyfy} from '@libs/lambda';
-import productsJSON from '../stubs/productList.json'
 import schema from './schema';
+import {ProductService} from "../../services/product.service";
 
 const getProductsById: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) => {
   try {
     const {id} = event.pathParameters
+
+    const rows = await ProductService.getProductById(id)
     return formatJSONResponse({
-      product: productsJSON.filter(product => product.id === id)
+      products: rows
     });
   } catch (e) {
-    return formatJSONResponseSpecificCode(404, {});
+    formatJSONResponseSpecificCode(500, {})
   }
 };
 
