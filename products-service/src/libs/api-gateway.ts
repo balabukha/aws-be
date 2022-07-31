@@ -5,9 +5,9 @@ type ValidatedAPIGatewayProxyEvent<S> = Omit<APIGatewayProxyEvent, 'body'> & { b
 export type ValidatedEventAPIGatewayProxyEvent<S> = Handler<ValidatedAPIGatewayProxyEvent<S>, APIGatewayProxyResult>
 
 const headers = {
-  "Access-Control-Allow-Headers": "Content-Type",
+  "Access-Control-Allow-Headers": "*",
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE"
+  "Access-Control-Allow-Methods": "*"
 };
 
 export const formatJSONResponse = (response: Record<string, unknown>) => {
