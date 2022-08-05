@@ -1,24 +1,21 @@
-import type { ValidatedEventAPIGatewayProxyEvent } from '@libs/api-gateway';
-import { formatJSONResponse } from '@libs/api-gateway';
-import { middyfy } from '@libs/lambda';
+import type {ValidatedEventAPIGatewayProxyEvent} from '@libs/api-gateway';
+import {formatJSONResponse} from '@libs/api-gateway';
+import {middyfy} from '@libs/lambda';
 import AWS from 'aws-sdk';
 
 import schema from './schema';
 
 const importProductsFile: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) => {
-  console.log('event', event);
-  const {fileName} = event.pathParameters
-  console.log('fileName', fileName);
-
   try {
     const params = {
       region: "eu-west-1",
     };
-    const {fileName} = event.pathParameters
+    const {name} = event.queryStringParameters
     const client = new AWS.S3(params);
     const url = await client.getSignedUrlPromise("putObject", {
       Bucket: "awsimportservice",
-      Key: `uploaded/${fileName}`,
+      Body: 'hello',
+      Key: `uploaded/${name}`,
       Expires: 60,
       ContentType: 'text/csv'
     });
