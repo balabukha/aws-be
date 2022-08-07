@@ -5,6 +5,8 @@ import AWS from 'aws-sdk';
 
 import schema from './schema';
 
+
+
 const importProductsFile: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) => {
   try {
     const params = {
